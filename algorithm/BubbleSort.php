@@ -5,7 +5,7 @@
  * @param array $array
  * @return array
  */
-function bubble_sort(array $array) : array
+function bubbleSort(array $array) : array
 {
     $count = count($array);
     if ($count == 0) {
@@ -24,4 +24,4 @@ function bubble_sort(array $array) : array
     return $array;
 }
 
-var_dump(bubble_sort([6, 3, 8, 2, 9, 1]));
+var_dump(bubbleSort([6, 3, 8, 2, 9, 1]));

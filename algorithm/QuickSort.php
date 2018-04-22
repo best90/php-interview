@@ -8,7 +8,7 @@
  * @param array $list
  * @return array
  */
-function quick_sort(array $list) : array
+function quickSort(array $list) : array
 {
     $count = count($list);
     if ($count <= 1) {
@@ -25,9 +25,9 @@ function quick_sort(array $list) : array
             $right[] = $list[$i];
         }
     }
-    $left = quick_sort($left);
-    $right = quick_sort($right);
+    $left = quickSort($left);
+    $right = quickSort($right);
     return array_merge($left, [$pointValue], $right);
 }
 
-var_dump(quick_sort([6, 3, 8, 2, 9, 1]));
+var_dump(quickSort([6, 3, 8, 2, 9, 1]));
