@@ -31,3 +31,30 @@ function quickSort(array $list) : array
 }
 
 var_dump(quickSort([6, 3, 8, 2, 9, 1]));
+
+
+function whileQuickSort(array $array) : array
+{
+    $count = count($array);
+    if ($count <= 1) {
+        return $array;
+    }
+
+    $pointValue = $array[0];
+    $left = [];
+    $right = [];
+    $i = 1;
+    while($i < $count) {
+        if ($array[$i] < $pointValue) {
+            $left[] = $array[$i];
+        }else{
+            $right[] = $array[$i];
+        }
+        $i++;
+    }
+    $left = whileQuickSort($left);
+    $right = whileQuickSort($right);
+    return array_merge($left, [$pointValue], $right);
+}
+
+var_dump(whileQuickSort([6, 3, 8, 2, 9, 1]));

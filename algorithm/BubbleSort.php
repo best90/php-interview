@@ -25,3 +25,27 @@ function bubbleSort(array $array) : array
 }
 
 var_dump(bubbleSort([6, 3, 8, 2, 9, 1]));
+
+
+function betterBubbleSort(array $array) : array
+{
+    $flag = true;
+    $length = count($array) - 1;
+    $index = $length;
+    while ($flag) {
+        $flag = false;
+        for ($i = 0; $i < $index; $i++) {
+            if ($array[$i] > $array[$i+1]) {
+                $flag = true;
+                $last = $i;
+                $temp = $array[$i];
+                $array[$i] = $array[$i+1];
+                $array[$i+1] = $temp;
+            }
+        }
+        $index = isset($last) ? $last : $index;
+    }
+    return $array;
+}
+
+var_dump(bubbleSort([6, 3, 8, 2, 9, 1]));
