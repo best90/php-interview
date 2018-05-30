@@ -77,28 +77,32 @@ element.removeEventListener("mousemove", myFunction);
 ```
 
 #### JavaScript Window - 浏览器对象模型
-
-window.open() - 打开新窗口
-window.close() - 关闭当前窗口
-window.moveTo() - 移动当前窗口
-window.resizeTo() - 调整当前窗口的尺寸
-screen.availWidth - 可用的屏幕宽度
-screen.availHeight - 可用的屏幕高度
-location.hostname 返回 web 主机的域名
-location.pathname 返回当前页面的路径和文件名
-location.port 返回 web 主机的端口 （80 或 443）
-location.protocol 返回所使用的 web 协议（http:// 或 https://）
-history.back() - 与在浏览器点击后退按钮相同
-history.forward() - 与在浏览器中点击向前按钮相同
-window.alert("sometext");
-window.confirm("sometext");
-window.prompt("sometext","defaultvalue");
-setInterval() 间隔指定的毫秒数不停地执行指定的代码
-clearInterval() 方法用于停止 setInterval() 方法执行的函数代码。
-setTimeout() 方法
+```
+- window.open() - 打开新窗口
+- window.close() - 关闭当前窗口
+- window.moveTo() - 移动当前窗口
+- window.resizeTo() - 调整当前窗口的尺寸
+- screen.availWidth - 可用的屏幕宽度
+- screen.availHeight - 可用的屏幕高度
+- location.hostname 返回 web 主机的域名
+- location.pathname 返回当前页面的路径和文件名
+- location.port 返回 web 主机的端口 （80 或 443）
+- location.protocol 返回所使用的 web 协议（http:// 或 https://）
+- history.back() - 与在浏览器点击后退按钮相同
+- history.forward() - 与在浏览器中点击向前按钮相同
+- window.alert("sometext");
+- window.confirm("sometext");
+- window.prompt("sometext","defaultvalue");
+- setInterval() 间隔指定的毫秒数不停地执行指定的代码
+- clearInterval() 方法用于停止 setInterval() 方法执行的函数代码。
+- setTimeout() 方法
+```
 
 #### 事件冒泡或事件捕获？
+
+```
 事件传递有两种方式：冒泡与捕获。
 事件传递定义了元素事件触发的顺序。 如果你将 <p> 元素插入到 <div> 元素中，用户点击 <p> 元素, 哪个元素的 "click" 事件先被触发呢？
 在 冒泡 中，内部元素的事件会先被触发，然后再触发外部元素，即： <p> 元素的点击事件先触发，然后会触发 <div> 元素的点击事件。
 在 捕获 中，外部元素的事件会先被触发，然后才会触发内部元素的事件，即： <div> 元素的点击事件先触发 ，然后再触发 <p> 元素的点击事件。
+```
