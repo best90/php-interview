@@ -11,7 +11,43 @@ CDN(Content Delivery Network 内容分发网络)的基本原理是广泛采用�
 
 分布式缓存指的是与应用分离的缓存组件或服务，其最大的优点是自身就是一个独立的应用，与本地应用隔离，多个应用可直接的共享缓存（如redis、memcached）
 
+#### Nginx本地缓存
 
+​Nginx 作为Web服务器或者负载均衡器，一般不执行业务逻辑，而是将请求转到后端服务器，比如 Tomcat 或者 php-fpm，后端处理完毕之后将经过 nginx 将数据返回给用户。
+在请求转发的过程中，nginx 可将中间数据在本地进行缓存，这样未来一段时间内的请求相同的数据，Nginx 可以直接返回本地复本，而不是再次向后端服务发起请求，可以大大降低后端服务器的压力。
+同时，在后端服务器宕机时，Nginx 还可返回缓存数据，而不中端服务，提高了服务的可用性。
+
+```
+# 定义缓存路径、过期时间、空间大小等
+proxy_cache_path  /tmp/nginx/cache levels=2:2:2 use_temp_path=off keys_zone=my_cache_name:10m inactive=1h max_size=1g;
+
+server {
+    listen       8000;
+    server_name  localhost;
+    # 添加缓存的 http 状态头
+    add_header X-Cache-Status $upstream_cache_status;
+
+    location / {
+            # 定义缓存名称
+            proxy_cache my_cache_name;
+            # 定义缓存key
+            proxy_cache_key $host$uri$is_args$args;
+            # 针对返回装装他码单独定义缓存时间
+            proxy_cache_valid 200 304 10m;
+            # url 上代用 nocache 获取请求投中代用 nocache，切值为true 时不走缓存。
+            proxy_cache_bypass $arg_nocache $http_nocahe;
+
+            proxy_pass http://localhost:8080;
+    }
+}
+```
+
+#### 客户端缓存
+- 浏览器端缓存
+主要是利用 Cache-Control 参数。
+
+- H5 缓存
+html5缓存主要可以分为http协议缓存、应用缓存、DOM Storage、webSQL和indexedDB
 
 #### Redis与Memcached比较
 
@@ -30,6 +66,16 @@ CDN(Content Delivery Network 内容分发网络)的基本原理是广泛采用�
 |    单机QPS     |                            约10W                             |                            约60W                             |
 |  源代码可读性  |                         代码清爽简洁                         |      能是考虑了太多的扩展性，多系统的兼容性，代码不清爽      |
 |    适用场景    |    复杂数据结构、有持久化、高可用需求、value存储内容较大     |            纯KV，数据量非常大，并发量非常大的业务            |
+
+
+- Memcached
+采用多路复用技术提高并发性。
+slab分配算法： memcached给Slab分配内存空间，默认是1MB。分配给Slab之后 把slab的切分成大小相同的chunk，Chunk是用于缓存记录的内存空间，Chunk 的大小默认按照1.25倍的速度递增。
+好处是不会频繁申请内存，提高IO效率，坏处是会有一定的内存浪费。
+
+- Redis底层原理
+使用 ziplist 存储链表，ziplist是一种压缩链表，它的好处是更能节省内存空间，因为它所存储的内容都是在连续的内存区域当中的。
+使用 skiplist(跳跃表)来存储有序集合对象、查找上先从高Level查起、时间复杂度和红黑树相当，实现容易，无锁、并发性好。
 
 #### 分层缓存架构设计
 
@@ -51,3 +97,9 @@ CDN(Content Delivery Network 内容分发网络)的基本原理是广泛采用�
 - 缓存热点
 	复制多份缓存副本，把请求分散到多个缓存服务器上，减轻缓存热点导致的单台缓存服务器压力
 
+#### 缓存失效策略
+- FIFO：First In First Out，先进先出。判断被存储的时间，离目前最远的数据优先被淘汰。
+
+- LRU：Least Recently Used，最近最少使用。判断最近被使用的时间，目前最远的数据优先被淘汰。
+
+- LFU：Least Frequently Used，最不经常使用。在一段时间内，数据被使用次数最少的，优先被淘汰。
