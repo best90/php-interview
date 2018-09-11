@@ -17,7 +17,7 @@ error_page 404 500 = /404.html;
 error_page 404 500 =404 /404.html;
 
 # 也可以把404请求直接301到某个域上
-error_page 404 =301 https://xuexb.com/404;
+error_page 404 =301 https://abc.com/404;
 ```
 
 #### 主域301重定向
@@ -62,7 +62,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $http_host;
-        proxy_set_header X-NginX-Proxy true;
+        proxy_set_header X-Nginx-Proxy true;
 
         # 代理服务
         proxy_pass http://127.0.0.1:8001$request_uri;
@@ -266,3 +266,11 @@ http {
     }
 }
 ```
+
+#### nginx其他配置
+
+```
+# 此指令设置NGINX能处理的最大请求主体大小。 如果请求大于指定的大小，则NGINX发回HTTP 413（Request Entity too large）错误。 如果服务器处理大文件上传，则该指令非常重要。
+client_max_body_size 10M
+```
+##### 配合修改php.ini 参数 upload_max_filesize = 8M;post_max_size = 16M;
